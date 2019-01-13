@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 	"text/template"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 type Employee struct {
@@ -29,7 +31,7 @@ var tmpl = template.Must(template.ParseGlob("form/*"))
 
 func Index(w http.ResponseWriter, r *http.Request) {
 	db := dbConn()
-	selDB, err := db.Query("SELEC * FROM Employee ORDER BY id DESC")
+	selDB, err := db.Query("SELECT * FROM Employee ORDER BY id DESC")
 	if err != nil {
 		panic(err.Error())
 	}
@@ -148,7 +150,7 @@ func Delete(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	log.Println("Server started on: http://localhost:8000")
+	log.Println("Server started on: http://localhost:4000")
 	http.HandleFunc("/", Index)
 	http.HandleFunc("/show", Show)
 	http.HandleFunc("/new", New)
@@ -156,5 +158,5 @@ func main() {
 	http.HandleFunc("/insert", Insert)
 	http.HandleFunc("/update", Update)
 	http.HandleFunc("/delete", Delete)
-	http.ListenAndServe(":5000", nil)
+	http.ListenAndServe(":4000", nil)
 }
